@@ -2,6 +2,9 @@
 
 namespace Alareqi\FilamentExtend;
 
+use Alareqi\FilamentExtend\Commands\MakeModelCommand;
+use Alareqi\FilamentExtend\Commands\MakeResourceCommand;
+use Alareqi\FilamentExtend\Testing\TestsFilamentExtend;
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Assets\Css;
@@ -13,10 +16,6 @@ use Livewire\Features\SupportTesting\Testable;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Alareqi\FilamentExtend\Commands\FilamentExtendCommand;
-use Alareqi\FilamentExtend\Commands\MakeModelCommand;
-use Alareqi\FilamentExtend\Commands\MakeResourceCommand;
-use Alareqi\FilamentExtend\Testing\TestsFilamentExtend;
 
 class FilamentExtendServiceProvider extends PackageServiceProvider
 {

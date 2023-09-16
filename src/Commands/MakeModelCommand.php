@@ -3,17 +3,16 @@
 namespace Alareqi\FilamentExtend\Commands;
 
 use Alareqi\FilamentUsersRoles\Support\Utils;
-use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use Filament\Support\Commands\Concerns\CanIndentStrings;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
-use Illuminate\Filesystem\Filesystem;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class MakeModelCommand extends Command
 {
-    use CanManipulateFiles;
     use CanIndentStrings;
+    use CanManipulateFiles;
 
     /**
      * The console command signature.
@@ -38,19 +37,19 @@ class MakeModelCommand extends Command
         $migrationName = null;
         $model = $this->argument('model');
 
-        $model =  str($model)->camel()->ucfirst();
+        $model = str($model)->camel()->ucfirst();
         $tableName = $model->snake()->pluralStudly();
         // check if model exists
         if (Utils::isModelExists($model)) {
             $this->warn("{$model} model already exists");
-            if (!$this->confirm('Do you want to overwrite it?')) {
+            if (! $this->confirm('Do you want to overwrite it?')) {
                 $this->error("{$model} model generation skipped.");
                 $makeModel = false;
             }
         }
         if ($migrationName = $this->migrationExist($tableName)) {
             $this->warn("{$tableName} migration already exists");
-            if (!$this->confirm('Do you want to overwrite it?')) {
+            if (! $this->confirm('Do you want to overwrite it?')) {
                 $this->error("{$tableName} migration generation skipped.");
                 $makeMigration = false;
             }
@@ -81,7 +80,7 @@ class MakeModelCommand extends Command
         if ($this->option('translatable')) {
             $namespaces .= "use Spatie\Translatable\HasTranslations;\n";
             $use .= "use HasTranslations;\n";
-            $properties .= "public \$translatable = [];";
+            $properties .= 'public $translatable = [];';
         }
         $this->copyStubToApp('Model', app_path("Models/{$model}.php"), [
             'model_name' => $model,
@@ -90,6 +89,7 @@ class MakeModelCommand extends Command
             'properties' => $this->indentString($properties),
         ]);
     }
+
     protected function copyStubToMigrations(string $tableName, ?string $migrationName): void
     {
 
@@ -97,7 +97,7 @@ class MakeModelCommand extends Command
         if ($this->option('soft-deletes')) {
             $columns .= "\n\$table->softDeletes();";
         }
-        $fileName = !empty($migrationName) ? $migrationName : now()->format('Y_m_d_His') . "_create_{$tableName}_table.php";
+        $fileName = ! empty($migrationName) ? $migrationName : now()->format('Y_m_d_His') . "_create_{$tableName}_table.php";
         $this->copyStubToApp('Migration', database_path("migrations/{$fileName}"), [
             'table_name' => $tableName,
             'columns' => $this->indentString($columns, 3),
@@ -108,12 +108,13 @@ class MakeModelCommand extends Command
     protected function migrationExist($tableName): bool | string
     {
         $fileName = "create_{$tableName}_table";
-        $migrationFiels = File::files(database_path("migrations"));
+        $migrationFiels = File::files(database_path('migrations'));
         foreach ($migrationFiels as $file) {
             if (Str::contains($file->getFilename(), $fileName)) {
                 return $file->getFilename();
             }
         }
+
         return false;
     }
 }

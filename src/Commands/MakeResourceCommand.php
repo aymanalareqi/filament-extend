@@ -58,7 +58,7 @@ class MakeResourceCommand extends Command
             $panel = Filament::getPanel($panel);
         }
 
-        if (!$panel) {
+        if (! $panel) {
             $panels = Filament::getPanels();
 
             /** @var Panel $panel */
@@ -92,16 +92,16 @@ class MakeResourceCommand extends Command
         $createResourcePageClass = "Create{$modelClass}";
         $editResourcePageClass = "Edit{$modelClass}";
         $viewResourcePageClass = "View{$modelClass}";
-        $resourceUsesamespaces = "";
-        $resourceUses = "";
-        $resourceListPageUsesamespaces = "";
-        $resourceListPageUses = "";
-        $resourceCreatePageUsesamespaces = "";
-        $resourceCreatePageUses = "";
-        $resourceEditPageUsesamespaces = "";
-        $resourceEditPageUses = "";
-        $resourceViewPageUsesamespaces = "";
-        $resourceViewPageUses = "";
+        $resourceUsesamespaces = '';
+        $resourceUses = '';
+        $resourceListPageUsesamespaces = '';
+        $resourceListPageUses = '';
+        $resourceCreatePageUsesamespaces = '';
+        $resourceCreatePageUses = '';
+        $resourceEditPageUsesamespaces = '';
+        $resourceEditPageUses = '';
+        $resourceViewPageUsesamespaces = '';
+        $resourceViewPageUses = '';
         $navigationIcon = null;
 
         $baseResourcePath =
@@ -119,7 +119,7 @@ class MakeResourceCommand extends Command
         $editResourcePagePath = "{$resourcePagesDirectory}/{$editResourcePageClass}.php";
         $viewResourcePagePath = "{$resourcePagesDirectory}/{$viewResourcePageClass}.php";
 
-        if (!$this->option('force') && $this->checkForCollision([
+        if (! $this->option('force') && $this->checkForCollision([
             $resourcePath,
             $listResourcePagePath,
             $manageResourcePagePath,
@@ -133,7 +133,7 @@ class MakeResourceCommand extends Command
         $pages = '';
         $pages .= '\'index\' => Pages\\' . ($this->option('simple') ? $manageResourcePageClass : $listResourcePageClass) . '::route(\'/\'),';
 
-        if (!$this->option('simple')) {
+        if (! $this->option('simple')) {
             $pages .= PHP_EOL . "'create' => Pages\\{$createResourcePageClass}::route('/create'),";
 
             if ($this->option('view')) {
@@ -192,7 +192,7 @@ class MakeResourceCommand extends Command
 
         $tableBulkActions = implode(PHP_EOL, $tableBulkActions);
 
-        $modelObject = new ("App\\Models" . "\\{$modelClass}")();
+        $modelObject = new ('App\\Models' . "\\{$modelClass}")();
 
         $translatable = false;
         if (count($modelObject->translatable ?? []) > 0) {
@@ -206,7 +206,7 @@ class MakeResourceCommand extends Command
             $resourceViewPageUses .= "use ViewRecord\Concerns\Translatable;\n";
             $resourceCreatePageUses .= "use CreateRecord\Concerns\Translatable;\n";
         }
-        $navigationIcon  = $modelObject->navigationIcon;
+        $navigationIcon = $modelObject->navigationIcon;
 
         $this->copyStubToApp('Resource', $resourcePath, [
             'eloquentQuery' => $this->indentString($eloquentQuery, 1),
@@ -252,8 +252,6 @@ class MakeResourceCommand extends Command
             $listPageActions = implode(PHP_EOL, $listPageActions);
             $createPageActions = implode(PHP_EOL, $createPageActions);
 
-
-
             $this->copyStubToApp('ResourceListPage', $listResourcePagePath, [
                 'namespace' => "{$namespace}\\{$resourceClass}\\Pages",
                 'resource' => "{$namespace}\\{$resourceClass}",
@@ -295,7 +293,6 @@ class MakeResourceCommand extends Command
 
                 $editPageActions[] = 'Actions\ViewAction::make(),';
             }
-
 
             $editPageActions[] = 'Actions\DeleteAction::make(),';
 
