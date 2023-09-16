@@ -1,6 +1,6 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace Alareqi\FilamentExtend;
 
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
@@ -13,14 +13,16 @@ use Livewire\Features\SupportTesting\Testable;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use VendorName\Skeleton\Commands\SkeletonCommand;
-use VendorName\Skeleton\Testing\TestsSkeleton;
+use Alareqi\FilamentExtend\Commands\FilamentExtendCommand;
+use Alareqi\FilamentExtend\Commands\MakeModelCommand;
+use Alareqi\FilamentExtend\Commands\MakeResourceCommand;
+use Alareqi\FilamentExtend\Testing\TestsFilamentExtend;
 
-class SkeletonServiceProvider extends PackageServiceProvider
+class FilamentExtendServiceProvider extends PackageServiceProvider
 {
-    public static string $name = 'skeleton';
+    public static string $name = 'filament-extend';
 
-    public static string $viewNamespace = 'skeleton';
+    public static string $viewNamespace = 'filament-extend';
 
     public function configurePackage(Package $package): void
     {
@@ -36,7 +38,7 @@ class SkeletonServiceProvider extends PackageServiceProvider
                     ->publishConfigFile()
                     ->publishMigrations()
                     ->askToRunMigrations()
-                    ->askToStarRepoOnGitHub(':vendor_slug/:package_slug');
+                    ->askToStarRepoOnGitHub('alareqi/filament-extend');
             });
 
         $configFileName = $package->shortName();
@@ -82,18 +84,22 @@ class SkeletonServiceProvider extends PackageServiceProvider
         if (app()->runningInConsole()) {
             foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
                 $this->publishes([
-                    $file->getRealPath() => base_path("stubs/skeleton/{$file->getFilename()}"),
-                ], 'skeleton-stubs');
+                    $file->getRealPath() => base_path("stubs/filament-extend/{$file->getFilename()}"),
+                ], 'filament-extend-stubs');
             }
         }
 
         // Testing
-        Testable::mixin(new TestsSkeleton());
+        Testable::mixin(new TestsFilamentExtend());
+
+        // dd($this->app->extend('command.make:filament-resource', function () {
+        //     return new MakeResourceCommand();
+        // }));
     }
 
     protected function getAssetPackageName(): ?string
     {
-        return ':vendor_slug/:package_slug';
+        return 'alareqi/filament-extend';
     }
 
     /**
@@ -102,9 +108,9 @@ class SkeletonServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            // AlpineComponent::make('skeleton', __DIR__ . '/../resources/dist/components/skeleton.js'),
-            Css::make('skeleton-styles', __DIR__ . '/../resources/dist/skeleton.css'),
-            Js::make('skeleton-scripts', __DIR__ . '/../resources/dist/skeleton.js'),
+            // AlpineComponent::make('filament-extend', __DIR__ . '/../resources/dist/components/filament-extend.js'),
+            // Css::make('filament-extend-styles', __DIR__ . '/../resources/dist/filament-extend.css'),
+            // Js::make('filament-extend-scripts', __DIR__ . '/../resources/dist/filament-extend.js'),
         ];
     }
 
@@ -114,7 +120,8 @@ class SkeletonServiceProvider extends PackageServiceProvider
     protected function getCommands(): array
     {
         return [
-            SkeletonCommand::class,
+            MakeResourceCommand::class,
+            MakeModelCommand::class,
         ];
     }
 
@@ -148,7 +155,7 @@ class SkeletonServiceProvider extends PackageServiceProvider
     protected function getMigrations(): array
     {
         return [
-            'create_skeleton_table',
+            'create_filament-extend_table',
         ];
     }
 }

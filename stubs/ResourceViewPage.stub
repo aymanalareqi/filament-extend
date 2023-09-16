@@ -1,0 +1,20 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ resource }};
+use Filament\Actions;
+use Filament\Resources\Pages\ViewRecord;
+
+class {{ resourcePageClass }} extends ViewRecord
+{
+{{ uses }}
+    protected static string $resource = {{ resourceClass }}::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+{{ actions }}
+        ];
+    }
+}

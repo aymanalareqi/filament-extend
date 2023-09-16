@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+{{ namespaces }}
+class {{ model_name }} extends Model
+{
+    use HasFactory;
+{{ use }}
+    protected $fillable = [
+        //
+        'status',
+    ];
+
+{{ properties }}
+
+    // for resource generation
+    public ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public ?string $navigationGroup = 'common.group_navigations.general';
+}
