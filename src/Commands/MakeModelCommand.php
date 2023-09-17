@@ -85,7 +85,7 @@ class MakeModelCommand extends Command
         }
         $this->copyStubToApp('Model', app_path("Models/{$model}.php"), [
             'modelClass' => $model,
-            'modelName' =>  $modelName,
+            'modelName' => $modelName,
             'namespaces' => $namespaces,
             'use' => $this->indentString($use),
             'properties' => $this->indentString($properties),
