@@ -232,6 +232,9 @@ class MakeResourceCommand extends Command
             'namespaces' => $resourceUsesamespaces,
             'uses' => $this->indentString($resourceUses),
             'navigationIcon' => $navigationIcon ?? 'heroicon-o-rectangle-stack',
+            'navigationGroup' => $modelObject->navigationGroup ?? 'common.group_navigations.general',
+            'modelLabel' => $modelObject->modelLabel ?? 'model',
+            'pluralModelLabel' => $modelObject->pluralModelLabel ?? 'models',
         ]);
 
         if ($this->option('simple')) {

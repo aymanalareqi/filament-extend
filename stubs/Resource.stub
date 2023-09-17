@@ -20,6 +20,21 @@ class {{ resourceClass }} extends Resource
 
     protected static ?string $navigationIcon = '{{ navigationIcon }}';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('{{ navigationGroup }}');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('{{ modelLabel }}');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('{{ pluralModelLabel }}');
+    }
+
     public static function form(Form $form): Form
     {
         return $form

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 {{ namespaces }}
-class {{ model_name }} extends Model
+class {{ modelClass }} extends Model
 {
     use HasFactory;
 {{ use }}
@@ -19,4 +19,9 @@ class {{ model_name }} extends Model
     public ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public ?string $navigationGroup = 'common.group_navigations.general';
+
+    public string $modelLabel = '{{ modelName }}.singular_name';
+
+    public string $pluralModelLabel = '{{ modelName }}.plural_name';
+
 }

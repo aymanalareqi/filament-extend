@@ -73,6 +73,7 @@ class MakeModelCommand extends Command
         $namespaces = '';
         $use = '';
         $properties = '';
+        $modelName = Str($model)->singular()->snake();
         if ($this->option('soft-deletes')) {
             $namespaces .= "use Illuminate\Database\Eloquent\SoftDeletes;\n";
             $use .= "use SoftDeletes;\n";
@@ -83,7 +84,8 @@ class MakeModelCommand extends Command
             $properties .= 'public $translatable = [];';
         }
         $this->copyStubToApp('Model', app_path("Models/{$model}.php"), [
-            'model_name' => $model,
+            'modelClass' => $model,
+            'modelName' =>  $modelName,
             'namespaces' => $namespaces,
             'use' => $this->indentString($use),
             'properties' => $this->indentString($properties),
