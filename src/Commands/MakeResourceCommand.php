@@ -2,13 +2,13 @@
 
 namespace Alareqi\FilamentExtend\Commands;
 
+use Alareqi\FilamentExtend\Commands\Concerns\CanGenerateForms;
+use Alareqi\FilamentExtend\Commands\Concerns\CanGenerateTables;
 use Filament\Facades\Filament;
-use Filament\Forms\Commands\Concerns\CanGenerateForms;
 use Filament\Panel;
 use Filament\Support\Commands\Concerns\CanIndentStrings;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Filament\Support\Commands\Concerns\CanReadModelSchemas;
-use Filament\Tables\Commands\Concerns\CanGenerateTables;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 
@@ -58,7 +58,7 @@ class MakeResourceCommand extends Command
             $panel = Filament::getPanel($panel);
         }
 
-        if (! $panel) {
+        if (!$panel) {
             $panels = Filament::getPanels();
 
             /** @var Panel $panel */
@@ -119,7 +119,7 @@ class MakeResourceCommand extends Command
         $editResourcePagePath = "{$resourcePagesDirectory}/{$editResourcePageClass}.php";
         $viewResourcePagePath = "{$resourcePagesDirectory}/{$viewResourcePageClass}.php";
 
-        if (! $this->option('force') && $this->checkForCollision([
+        if (!$this->option('force') && $this->checkForCollision([
             $resourcePath,
             $listResourcePagePath,
             $manageResourcePagePath,
@@ -133,7 +133,7 @@ class MakeResourceCommand extends Command
         $pages = '';
         $pages .= '\'index\' => Pages\\' . ($this->option('simple') ? $manageResourcePageClass : $listResourcePageClass) . '::route(\'/\'),';
 
-        if (! $this->option('simple')) {
+        if (!$this->option('simple')) {
             $pages .= PHP_EOL . "'create' => Pages\\{$createResourcePageClass}::route('/create'),";
 
             if ($this->option('view')) {
@@ -212,7 +212,7 @@ class MakeResourceCommand extends Command
             'eloquentQuery' => $this->indentString($eloquentQuery, 1),
             'formSchema' => $this->indentString($this->option('generate') ? $this->getResourceFormSchema(
                 'App\\Models' . ($modelNamespace !== '' ? "\\{$modelNamespace}" : '') . '\\' . $modelClass,
-            ) : '//', 4),
+            ) : '//', 5),
             'model' => $model === 'Resource' ? 'Resource as ResourceModel' : $model,
             'modelClass' => $model === 'Resource' ? 'ResourceModel' : $modelClass,
             'namespace' => $namespace,

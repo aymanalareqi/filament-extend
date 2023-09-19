@@ -39,8 +39,28 @@ class {{ resourceClass }} extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Section::make()->schema([
 {{ formSchema }}
-            ]);
+                ])->columnSpan(
+                    [
+                        "sm" => 2
+                    ]
+                ),
+                Forms\Components\Section::make([
+                    Forms\Components\Placeholder::make('created_at')
+                        ->content(fn ($record): string => $record ? $record->created_at->diffForHumans() : '-'),
+                    Forms\Components\Placeholder::make('updated_at')
+                        ->content(fn ($record): string => $record ? $record->updated_at->diffForHumans() : '-'),
+                    Forms\Components\Placeholder::make('deleted_at')
+                        ->visible(fn ($record): bool => $record?->deleted_at ? true : false)
+                        ->content(fn ($record): string => $record ? $record->deleted_at->diffForHumans() : '-'),
+                ])->columnSpan(1),
+            ])->columns(
+                [
+                    "sm" => 3,
+                    "lg" => null,
+                ]
+            );
     }
 
     public static function table(Table $table): Table
