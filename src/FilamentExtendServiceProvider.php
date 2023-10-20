@@ -2,6 +2,7 @@
 
 namespace Alareqi\FilamentExtend;
 
+use Alareqi\FilamentExtend\Commands\CopyResourceCommand;
 use Alareqi\FilamentExtend\Commands\MakeModelCommand;
 use Alareqi\FilamentExtend\Commands\MakeResourceCommand;
 use Alareqi\FilamentExtend\Testing\TestsFilamentExtend;
@@ -121,6 +122,7 @@ class FilamentExtendServiceProvider extends PackageServiceProvider
         return [
             MakeResourceCommand::class,
             MakeModelCommand::class,
+            CopyResourceCommand::class,
         ];
     }
 

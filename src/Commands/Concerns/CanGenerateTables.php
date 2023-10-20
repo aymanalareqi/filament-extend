@@ -60,6 +60,11 @@ trait CanGenerateTables
             ])) {
                 continue;
             }
+            if (str($columnName)->is([
+                '*_verified_at'
+            ])) {
+                continue;
+            }
 
             if (str($columnName)->endsWith('_id')) {
                 $guessedRelationshipName = $this->guessBelongsToRelationshipName($column, $model);
@@ -69,6 +74,9 @@ trait CanGenerateTables
 
                     $columnName = "{$guessedRelationshipName}.{$guessedRelationshipTitleColumnName}";
                 }
+                $relationshipModelName = str($columnName)->beforeLast('_id');
+                $relationshipColumnName = $modelObject->relationshipsColumns[$columnName] ?? 'name';
+                $columnName = "$relationshipModelName.$relationshipColumnName";
             }
 
             $columnData = [];
@@ -79,6 +87,8 @@ trait CanGenerateTables
             ])) {
                 $columnData['label'] = [Str::upper($columnName)];
             }
+
+
 
             $isTranslatable = false;
             if ($modelObject->translatable) {
@@ -97,8 +107,13 @@ trait CanGenerateTables
                 $columnData['label'] = ['__(\'' . $translationPrefix . '.fields.' . $column->getName() . '.label\')'];
             }
             if ($column->getType() instanceof Types\BooleanType) {
-                $columnData['type'] = Tables\Columns\IconColumn::class;
-                $columnData['boolean'] = [];
+                if (str($columnName)->is('gender')) {
+                    $columnData['type'] = Tables\Columns\TextColumn::class;
+                    $columnData['formatStateUsing'] = ["fn (\$state): string => __('common.options.gender.' . \$state)"];
+                } else {
+                    $columnData['type'] = Tables\Columns\IconColumn::class;
+                    $columnData['boolean'] = [];
+                }
             } else {
                 $columnData['type'] = match (true) {
                     $columnName === 'image', str($columnName)->startsWith('image_'), str($columnName)->contains('_image_'), str($columnName)->endsWith('_image') => Tables\Columns\ImageColumn::class,
@@ -116,6 +131,7 @@ trait CanGenerateTables
                 ]) && ($columnData['type'] === Tables\Columns\TextColumn::class)) {
                     $columnData['searchable'] = [];
                 }
+
 
                 if (in_array($column->getType()::class, [
                     Types\DateImmutableType::class,

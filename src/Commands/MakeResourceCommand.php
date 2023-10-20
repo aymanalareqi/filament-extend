@@ -4,11 +4,11 @@ namespace Alareqi\FilamentExtend\Commands;
 
 use Alareqi\FilamentExtend\Commands\Concerns\CanGenerateForms;
 use Alareqi\FilamentExtend\Commands\Concerns\CanGenerateTables;
+use Alareqi\FilamentExtend\Commands\Concerns\CanReadModelSchemas;
 use Filament\Facades\Filament;
 use Filament\Panel;
 use Filament\Support\Commands\Concerns\CanIndentStrings;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
-use Filament\Support\Commands\Concerns\CanReadModelSchemas;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 
@@ -232,8 +232,10 @@ class MakeResourceCommand extends Command
             'namespaces' => $resourceUsesamespaces,
             'uses' => $this->indentString($resourceUses),
             'navigationIcon' => $navigationIcon ?? 'heroicon-o-rectangle-stack',
+            'navigationSort' => $modelObject?->navigationSort ?? 0,
             'navigationGroup' => $modelObject->navigationGroup ?? 'common.group_navigations.general',
             'modelLabel' => $modelObject->modelLabel ?? 'model',
+            'reorderable' => $modelObject->reorderable != null ? "'$modelObject->reorderable'" : 'null',
             'pluralModelLabel' => $modelObject->pluralModelLabel ?? 'models',
         ]);
 
@@ -314,6 +316,13 @@ class MakeResourceCommand extends Command
                 'resourcePageClass' => $editResourcePageClass,
                 'uses' => $this->indentString($resourceEditPageUses),
             ]);
+
+            $langFileName =  Str($model)->singular()->snake();
+
+            $langPath = lang_path('ar/' . $langFileName . '.php');
+            if (!file_exists($langPath)) {
+                $this->copyStubToApp('Translation', $langPath, []);
+            }
         }
 
         $this->components->info("Successfully created {$resource}!");

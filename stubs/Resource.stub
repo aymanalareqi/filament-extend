@@ -20,6 +20,8 @@ class {{ resourceClass }} extends Resource
 
     protected static ?string $navigationIcon = '{{ navigationIcon }}';
 
+    protected static ?int $navigationSort = {{ navigationSort }};
+
     public static function getNavigationGroup(): ?string
     {
         return __('{{ navigationGroup }}');
@@ -48,10 +50,13 @@ class {{ resourceClass }} extends Resource
                 ),
                 Forms\Components\Section::make([
                     Forms\Components\Placeholder::make('created_at')
+                        ->label(__('common.fields.created_at.label'))
                         ->content(fn ($record): string => $record ? $record->created_at->diffForHumans() : '-'),
                     Forms\Components\Placeholder::make('updated_at')
+                        ->label(__('common.fields.updated_at.label'))
                         ->content(fn ($record): string => $record ? $record->updated_at->diffForHumans() : '-'),
-                    Forms\Components\Placeholder::make('deleted_at')
+                    Forms\Components\Placeholder::make(__('common.fields.deleted_at.label'))
+                        ->label('deleted_at')
                         ->visible(fn ($record): bool => $record?->deleted_at ? true : false)
                         ->content(fn ($record): string => $record ? $record->deleted_at->diffForHumans() : '-'),
                 ])->columnSpan(1),
@@ -66,6 +71,7 @@ class {{ resourceClass }} extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderable({{ reorderable }})
             ->columns([
 {{ tableColumns }}
             ])

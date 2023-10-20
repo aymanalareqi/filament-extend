@@ -1,0 +1,9 @@
+<?php
+
+return [
+    'singular_label' => '',
+    'plural_label' => '',
+    'fields' => [
+        //
+    ],
+];

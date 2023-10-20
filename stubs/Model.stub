@@ -10,6 +10,7 @@ class {{ modelClass }} extends Model
 {{ use }}
     protected $fillable = [
         //
+        'sort',
         'status',
     ];
 
@@ -20,8 +21,15 @@ class {{ modelClass }} extends Model
 
     public ?string $navigationGroup = 'common.group_navigations.general';
 
-    public string $modelLabel = '{{ modelName }}.singular_name';
+    public ?int $navigationSort = 0;
 
-    public string $pluralModelLabel = '{{ modelName }}.plural_name';
+    public string $modelLabel = '{{ modelName }}.singular_label';
 
+    public string $pluralModelLabel = '{{ modelName }}.plural_label';
+
+    public array $relationshipsColumns = [
+        'relation_id' => "column"
+    ];
+
+    public ?string $reorderable = null;
 }

@@ -47,6 +47,7 @@ trait CanGenerateForms
                 'deleted_at',
                 'updated_at',
                 '*_token',
+                '*_verified_at'
             ])) {
                 continue;
             }
@@ -67,16 +68,24 @@ trait CanGenerateForms
             } else {
                 $componentData['label'] = ['__(\'' . $translationPrefix . '.fields.' . $columnName . '.label\')'];
             }
-
+            if (method_exists($componentData['type'], 'placeholder')) {
+                $componentData['placeholder'] = ['__(\'' . $translationPrefix . '.fields.' . $columnName . '.placeholder\')'];
+            }
             if (str($columnName)->endsWith('_id')) {
                 $guessedRelationshipName = $this->guessBelongsToRelationshipName($column, $model);
+                // dd($guessedRelationshipName);
 
                 if (filled($guessedRelationshipName)) {
                     $guessedRelationshipTitleColumnName = $this->guessBelongsToRelationshipTitleColumnName($column, app($model)->{$guessedRelationshipName}()->getModel()::class);
-
                     $componentData['type'] = Forms\Components\Select::class;
                     $componentData['relationship'] = [$guessedRelationshipName, $guessedRelationshipTitleColumnName];
                 }
+
+                $componentData['type'] = Forms\Components\Select::class;
+                $componentData['required'] = [];
+                $relationshipModelName = str($columnName)->beforeLast('_id')->ucfirst();
+                $relationshipColumnName = $modelObject->relationshipsColumns[$columnName] ?? 'name';
+                $componentData['options'] = ["\App\Models\\$relationshipModelName::pluck('$relationshipColumnName', 'id')"];
             }
 
             if (in_array($columnName, [
@@ -84,6 +93,13 @@ trait CanGenerateForms
                 'uuid',
             ])) {
                 $componentData['label'] = [Str::upper($columnName)];
+            }
+
+            if (in_array($columnName, [
+                'gender',
+            ])) {
+                $componentData['type'] = Forms\Components\Select::class;
+                $componentData['options'] = ["__('common.options.gender')"];
             }
 
 
@@ -109,6 +125,8 @@ trait CanGenerateForms
             if ($column->getNotnull()) {
                 $componentData['required'] = [];
             }
+
+
 
             if (in_array($column->getType()::class, [
                 Types\BigIntType::class,
