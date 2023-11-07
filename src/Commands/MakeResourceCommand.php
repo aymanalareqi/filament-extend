@@ -168,10 +168,17 @@ class MakeResourceCommand extends Command
             $relations .= PHP_EOL . '    ];';
             $relations .= PHP_EOL . '}' . PHP_EOL;
         }
+        $modelObject = new ('App\\Models' . "\\{$modelClass}")();
 
         $tableActions = implode(PHP_EOL, $tableActions);
 
         $tableBulkActions = [];
+
+        if ($modelObject->fillable)
+
+            $tableBulkActions[] = '\App\Filament\Actions\Table\ActivateBulkAction::make(),';
+
+        $tableBulkActions[] = '\App\Filament\Actions\Table\DeactivateBulkAction::make(),';
 
         $tableBulkActions[] = 'Tables\Actions\DeleteBulkAction::make(),';
 
@@ -192,7 +199,6 @@ class MakeResourceCommand extends Command
 
         $tableBulkActions = implode(PHP_EOL, $tableBulkActions);
 
-        $modelObject = new ('App\\Models' . "\\{$modelClass}")();
 
         $translatable = false;
         if (count($modelObject->translatable ?? []) > 0) {

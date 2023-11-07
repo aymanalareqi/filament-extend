@@ -83,7 +83,7 @@ trait CanGenerateForms
 
                 $componentData['type'] = Forms\Components\Select::class;
                 $componentData['required'] = [];
-                $relationshipModelName = str($columnName)->beforeLast('_id')->ucfirst();
+                $relationshipModelName = str($columnName)->beforeLast('_id')->camel()->ucfirst();
                 $relationshipColumnName = $modelObject->relationshipsColumns[$columnName] ?? 'name';
                 $componentData['options'] = ["\App\Models\\$relationshipModelName::pluck('$relationshipColumnName', 'id')"];
             }
