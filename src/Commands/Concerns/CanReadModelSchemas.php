@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use ReflectionClass;
 use ReflectionException;
 use Throwable;
 
@@ -43,12 +44,12 @@ trait CanReadModelSchemas
     {
         /** @var Model $modelInstance */
         $modelInstance = app($model);
-        $modelInstanceReflection = invade($modelInstance);
+        $modelInstanceReflection = new ReflectionClass($modelInstance);
         $guessedRelationshipName = str($column->getName())->beforeLast('_id');
-        $hasRelationship = $modelInstanceReflection->reflected->hasMethod($guessedRelationshipName);
-        if (!$hasRelationship) {
+        $hasRelationship = $modelInstanceReflection->hasMethod($guessedRelationshipName);
+    if (!$hasRelationship) {
             $guessedRelationshipName = $guessedRelationshipName->camel();
-            $hasRelationship = $modelInstanceReflection->reflected->hasMethod($guessedRelationshipName);
+            $hasRelationship = $modelInstanceReflection->hasMethod($guessedRelationshipName);
         }
 
         if (!$hasRelationship) {
@@ -56,7 +57,7 @@ trait CanReadModelSchemas
         }
 
         try {
-            $type = $modelInstanceReflection->reflected->getMethod($guessedRelationshipName)->getReturnType();
+            $type = $modelInstanceReflection->getMethod($guessedRelationshipName)->getReturnType();
 
             if (
                 (!$type) ||
